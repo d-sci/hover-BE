@@ -66,7 +66,7 @@ p1 = Passenger.create(
 p2 = Passenger.create(
   first_name: "Another", 
   last_name: "Passenger",
-  email: "p1@example.com", 
+  email: "p2@example.com", 
   phone: "123-456-7890", 
   gender: "F", 
   company: "U of T", 
