@@ -10,16 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170214181546) do
+ActiveRecord::Schema.define(version: 20170216175427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "trips", force: :cascade do |t|
-    t.integer  "driver_id"
-    t.integer  "passenger_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "driver_id"
+    t.integer  "passenger_id"
+    t.index ["driver_id"], name: "index_trips_on_driver_id", using: :btree
+    t.index ["passenger_id"], name: "index_trips_on_passenger_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -32,6 +34,7 @@ ActiveRecord::Schema.define(version: 20170214181546) do
     t.datetime "updated_at", null: false
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "type"
   end
 
 end
