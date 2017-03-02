@@ -5,8 +5,9 @@ class UsersController < ApplicationController
   # GET /users
   def index
     @users = User.all
-    
-    render json: "{\"users\":" + @users.to_json + "}" #Malik's request
+    #render json: @users    # this works but not in format Malik wants
+    render json: "{\"users\":" + @users.to_json + "}" # Malik's request (but unserialized)
+    # but we don't actually need an index at all
   end
 
   # GET /users/1
