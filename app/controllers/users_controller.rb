@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:show, :update, :destroy, :trips]
   skip_before_action :authenticate_request, only: [:create]
 
   # GET /users
@@ -39,6 +39,11 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
+  # GET /users/1/trips
+  def trips
+    render json: @user.trips
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
