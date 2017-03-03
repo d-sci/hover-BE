@@ -12,4 +12,6 @@ class User < ApplicationRecord
             length: { minimum: 6 },
             allow_nil: true #for updating (has_secure won't allow for new)
             )
+  has_many :pools
+  has_many :trips, through: :pools
 end

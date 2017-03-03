@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  driver: 1
+  is_active: false
+  is_deleted: false
+  user: one
+  trip: one
+
+two:
+  driver: 1
+  is_active: false
+  is_deleted: false
+  user: two
+  trip: two
