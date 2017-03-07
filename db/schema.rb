@@ -10,26 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170303213754) do
+ActiveRecord::Schema.define(version: 20170307002455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "pools", force: :cascade do |t|
-    t.string   "role"
     t.boolean  "is_active"
-    t.boolean  "is_deleted"
     t.integer  "user_id"
     t.integer  "trip_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "is_driver"
     t.index ["trip_id"], name: "index_pools_on_trip_id", using: :btree
     t.index ["user_id"], name: "index_pools_on_user_id", using: :btree
   end
 
   create_table "trips", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.decimal  "waypoints",  default: [],              array: true
+    t.time     "waytimes",   default: [],              array: true
+    t.boolean  "to_work"
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,15 +44,10 @@ ActiveRecord::Schema.define(version: 20170303213754) do
     t.datetime "updated_at",                   null: false
     t.string   "first_name"
     t.string   "last_name"
-    t.decimal  "office_lat"
-    t.decimal  "office_lon"
-    t.decimal  "home_lat"
-    t.decimal  "home_lon"
     t.string   "radio_stations",  default: [],              array: true
     t.integer  "talkativeness"
     t.boolean  "smoke"
     t.boolean  "ac"
-    t.json     "times"
     t.string   "password_digest"
     t.json     "car"
     t.string   "user_type"

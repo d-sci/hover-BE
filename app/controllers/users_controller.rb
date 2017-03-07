@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy, :trips]
+  before_action :set_user, only: [:show, :update, :destroy, :active_trips]
   skip_before_action :authenticate_request, only: [:create]
 
   # GET /users
@@ -40,9 +40,11 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
-  # GET /users/1/trips
-  def trips
-    render json: @user.trips
+  # GET /users/1/active_trips
+  def active_trips
+    @active_trips = []
+    @user.pools.where(:is_active => true).each { |pool| @active_trips << Trip.find(pool.trip_id)}
+    render json: @active_trips
   end
   
   private
@@ -55,8 +57,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:password, :password_confirmation,
         :first_name, :last_name, :email, :phone, 
-        :gender, :company, :position, :type, :office_lat, :office_lon,
-        :home_lat, :home_lon, :radio_stations, :talkativeness, :smoke,
-        :ac, :times)
+        :gender, :company, :position, :user_type, :car, 
+        :radio_stations, :talkativeness, :smoke, :ac)
     end
 end

@@ -17,15 +17,10 @@ d1 = User.create(
   gender: "M", 
   company: "U of T", 
   position: "TA", 
-  office_lat: 43.6500324, 
-  office_lon: -79.391594, 
-  home_lat: 43.8500324, 
-  home_lon: -79.691594, 
   radio_stations: ["104.5", "98.2"], 
   talkativeness: 4, 
   smoke: false, 
   ac: true, 
-  times: {"to_work"=>9, "to_home"=>17},
   car: {"make"=>"Toyota", "model"=>"Camry", "year"=>"2015", "colour":"Silver"}
   )
 
@@ -40,15 +35,10 @@ d2 = User.create(
   gender: "F", 
   company: "U of T", 
   position: "TA", 
-  office_lat: 43.6500324, 
-  office_lon: -79.391594, 
-  home_lat: 43.1500324, 
-  home_lon: -79.191594, 
   radio_stations: ["104.5", "99.1"], 
   talkativeness: 7, 
   smoke: true, 
   ac: true, 
-  times: {"to_work"=>9, "to_home"=>17},
   car: {"make"=>"Honda", "model"=>"Civic", "year"=>"2010", "colour":"Blue"}
   )
 
@@ -63,15 +53,10 @@ p1 = User.create(
   gender: "F", 
   company: "U of T", 
   position: "TA", 
-  office_lat: 43.6500324, 
-  office_lon: -79.391594, 
-  home_lat: 44.1500324, 
-  home_lon: -80.191594, 
   radio_stations: ["99.1", "98.2"], 
   talkativeness: 3, 
   smoke: false, 
   ac: false, 
-  times: {"to_work"=>10, "to_home"=>18} 
   )
   
 p2 = User.create(
@@ -85,15 +70,10 @@ p2 = User.create(
   gender: "F", 
   company: "U of T", 
   position: "TA", 
-  office_lat: 43.6500324, 
-  office_lon: -79.391594, 
-  home_lat: 43.1500324, 
-  home_lon: -79.191594, 
   radio_stations: ["104.5", "98.2"], 
   talkativeness: 7, 
   smoke: true, 
   ac: true, 
-  times: {"to_work"=>10, "to_home"=>18} 
   )
 
 b1 = User.create(
@@ -107,15 +87,10 @@ b1 = User.create(
   gender: "F", 
   company: "U of T", 
   position: "TA", 
-  office_lat: 43.6500324, 
-  office_lon: -79.391594, 
-  home_lat: 44.1500324, 
-  home_lon: -80.191594, 
   radio_stations: ["99.1", "98.2"], 
   talkativeness: 3, 
   smoke: false, 
   ac: false, 
-  times: {"to_work"=>10, "to_home"=>18} 
   )
   
 b2 = User.create(
@@ -129,16 +104,47 @@ b2 = User.create(
   gender: "F", 
   company: "U of T", 
   position: "TA", 
-  office_lat: 43.6500324, 
-  office_lon: -79.391594, 
-  home_lat: 43.1500324, 
-  home_lon: -79.191594, 
   radio_stations: ["104.5", "98.2"], 
   talkativeness: 7, 
   smoke: true, 
   ac: true, 
-  times: {"to_work"=>10, "to_home"=>18} 
   )  
   
-#Trip.create(driver_id: d1.id, passenger_id: p1.id)
-#Trip.create(driver_id: d2.id, passenger_id: p2.id)
+
+t1 = Trip.create(
+  waypoints: [43.6500324, -79.391594, 43.8500324, -79.691594],
+  waytimes: ["07:26:12", "07:56:12"],
+  to_work: true
+  )
+
+t2 = Trip.create(
+  waypoints: [43.8500324, -79.691594, 43.6500324, -79.391594],
+  waytimes: ["22:26:12", "22:56:12"],
+  to_work: true
+  )
+
+t3 = Trip.create(
+  waypoints: [43.8500324, -79.691594, 43.6500324, -79.391594],
+  waytimes: ["22:26:12", "22:56:12"],
+  to_work: true
+  )  
+  
+t4 = Trip.create(
+  waypoints: [43.6500324, -79.391594, 43.8500324, -79.691594],
+  waytimes: ["07:26:12", "07:56:12"],
+  to_work: true
+  )
+  
+t5 = Trip.create(
+  waypoints: [43.6500324, -79.391594, 43.8500324, -79.691594],
+  waytimes: ["07:26:12", "07:56:12"],
+  to_work: true
+  )    
+  
+  
+Pool.create(user_id: d1.id, trip_id: t1.id, is_driver: true, is_active: false)
+Pool.create(user_id: p1.id, trip_id: t2.id, is_driver: false, is_active: false)
+Pool.create(user_id: d2.id, trip_id: t3.id, is_driver: true, is_active: true)
+Pool.create(user_id: p2.id, trip_id: t4.id, is_driver: false, is_active: true)
+Pool.create(user_id: d1.id, trip_id: t5.id, is_driver: true, is_active: true)
+Pool.create(user_id: p1.id, trip_id: t5.id, is_driver: false, is_active: true)
