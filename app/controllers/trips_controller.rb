@@ -1,5 +1,5 @@
 class TripsController < ApplicationController
-  before_action :set_trip, only: [:show, :update, :destroy]
+  before_action :set_trip, only: [:show, :update, :destroy, :active_users]
 
   # GET /trips
   def index
@@ -36,6 +36,13 @@ class TripsController < ApplicationController
   # DELETE /trips/1
   def destroy
     @trip.destroy
+  end
+  
+  # GET /trips/1/active_users
+  def active_users
+    @active_users = []
+    @trip.pools.where(:is_active => true).each { |pool| @active_users << User.find(pool.user_id)}
+    render json: @active_users
   end
 
   private

@@ -3,7 +3,7 @@ class PoolsController < ApplicationController
 
   # GET /pools
   def index
-    @pools = pool.all
+    @pools = Pool.all
 
     render json: @pools
   end
@@ -15,7 +15,7 @@ class PoolsController < ApplicationController
 
   # POST /pools
   def create
-    @pool = pool.new(pool_params)
+    @pool = Pool.new(pool_params)
 
     if @pool.save
       render json: @pool, status: :created, location: @pool
@@ -41,7 +41,7 @@ class PoolsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_pool
-      @pool = pool.find(params[:id])
+      @pool = Pool.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
