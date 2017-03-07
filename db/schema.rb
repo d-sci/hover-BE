@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307002455) do
+ActiveRecord::Schema.define(version: 20170307225130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,9 +29,9 @@ ActiveRecord::Schema.define(version: 20170307002455) do
   create_table "trips", force: :cascade do |t|
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.decimal  "waypoints",  default: [],              array: true
     t.time     "waytimes",   default: [],              array: true
     t.boolean  "to_work"
+    t.json     "waypoints",  default: [],              array: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -40,17 +40,18 @@ ActiveRecord::Schema.define(version: 20170307002455) do
     t.string   "gender"
     t.string   "company"
     t.string   "position"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "radio_stations",  default: [],              array: true
+    t.string   "radio_stations",  default: [],                 array: true
     t.integer  "talkativeness"
     t.boolean  "smoke"
     t.boolean  "ac"
     t.string   "password_digest"
     t.json     "car"
     t.string   "user_type"
+    t.boolean  "has_avatar",      default: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
