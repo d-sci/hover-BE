@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       get :active_trips
     end
   end
-  post 'authenticate', to: 'authentication#authenticate'
+  post 'login', to: 'authentication#login'
+  post 'account_activation', to: 'authentication#account_activation'
+  post 'password_reset', to: 'authentication#password_reset'
   
 end
