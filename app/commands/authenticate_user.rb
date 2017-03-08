@@ -22,7 +22,7 @@ class AuthenticateUser
     if action == 'login'
       return user if user && user.authenticate(code_or_password)
     else
-      return user if user && user.authenticate(code_or_password)
+      return user if user && user.authenticate_by_code(action, code_or_password)
     end
     
     errors.add :user_authentication, 'invalid credentials' 

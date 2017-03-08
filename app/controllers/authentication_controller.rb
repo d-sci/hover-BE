@@ -6,7 +6,8 @@ class AuthenticationController < ApplicationController
   def login
     command = AuthenticateUser.call(params[:email], params[:password], 'login') 
     if command.success? 
-      render json: { auth_token: command.result, user: User.find_by_email(params[:email]) }
+      render json: {message: "Succesfully logged in. Here is your auth_token", 
+                    auth_token: command.result, user: User.find_by_email(params[:email]) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
@@ -14,8 +15,11 @@ class AuthenticationController < ApplicationController
   
   def account_activation
     command = AuthenticateUser.call(params[:email], params[:code], 'activation') 
-    if command.success? 
-      render json: { auth_token: command.result, debug: "Account Activation" }
+    if command.success?
+      user = User.find_by_email(params[:email])
+      user.activate
+      render json: { message: "Succesfully activated account. Here is your auth_token. Please proceed to set a password", 
+                    auth_token: command.result,  user: user }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
@@ -24,7 +28,8 @@ class AuthenticationController < ApplicationController
   def password_reset
     command = AuthenticateUser.call(params[:email], params[:code], 'reset') 
     if command.success? 
-      render json: { auth_token: command.result, debug: "Password Reset" }
+      render json: { message: "Here is your auth_token. Please proceed to reset your password", 
+                    auth_token: command.result,  user: User.find_by_email(params[:email]) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
