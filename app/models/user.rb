@@ -15,13 +15,14 @@ class User < ApplicationRecord
   has_many :pools
   has_many :trips, through: :pools
   
-  
+  # Creates a hash of a code
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
   end
   
+  # Generates a random 6-character code
   def User.new_code
     SecureRandom.urlsafe_base64[0..6]
   end
@@ -33,21 +34,20 @@ class User < ApplicationRecord
   
   # Sets the password reset attributes.
   def create_reset_digest
-    self.reset_token = User.new_token
-    update_columns(reset_digest:User.digest(reset_token), 
+    self.reset_code = User.new_code
+    update_columns(reset_digest:User.digest(reset_code), 
                     reset_sent_at: Time.zone.now)
   end
   
   # Sets the account activation attributes
     def create_activation_digest
-      self.activation_token  = User.new_token
-      update_columns(activation_digest:User.digest(activation_token), 
+      self.activation_code  = User.new_code
+      update_columns(activation_digest:User.digest(activation_code), 
                     activation_sent_at: Time.zone.now)
     end
   
   # Authenticate a user by activation or reset code
   def authenticate_by_code(action, code)
-    return true
     digest = self.send("#{action}_digest")
     sent_at = self.send("#{action}_sent_at")
     return false if digest.nil? or sent_at < 2.hours.ago
