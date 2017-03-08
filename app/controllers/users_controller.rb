@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :active_trips]
+  before_action :confirm_correct_user, only: [:update, :destroy]
   skip_before_action :authenticate_request, only: [:create]
 
   # GET /users
@@ -48,9 +49,14 @@ class UsersController < ApplicationController
   end
   
   private
-    # Use callbacks to share common setup or constraints between actions.
+    # Defines the user based on the URL
     def set_user
       @user = User.find(params[:id])
+    end
+    
+    # Confirms that the user making the request is the user about whom the request is made
+    def confirm_correct_user 
+      render json: { error: 'Not Authorized' }, status: 401 unless @current_user==@user 
     end
 
     # Only allow a trusted parameter "white list" through.
