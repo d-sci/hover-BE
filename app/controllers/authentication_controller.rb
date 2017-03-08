@@ -6,8 +6,9 @@ class AuthenticationController < ApplicationController
   def login
     command = AuthenticateUser.call(params[:email], params[:password], 'login') 
     if command.success? 
+      user = User.find_by_email(params[:email])
       render json: {message: "Succesfully logged in. Here is your auth_token", 
-                    auth_token: command.result, user: User.find_by_email(params[:email]) }
+                    auth_token: command.result, user: UserSerializer.new(user) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
@@ -19,7 +20,7 @@ class AuthenticationController < ApplicationController
       user = User.find_by_email(params[:email])
       user.activate
       render json: { message: "Succesfully activated account. Here is your auth_token. Please proceed to set a password", 
-                    auth_token: command.result,  user: user }
+                    auth_token: command.result,  user: UserSerializer.new(user) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
@@ -28,8 +29,9 @@ class AuthenticationController < ApplicationController
   def password_reset
     command = AuthenticateUser.call(params[:email], params[:code], 'reset') 
     if command.success? 
+      user = User.find_by_email(params[:email])
       render json: { message: "Here is your auth_token. Please proceed to reset your password", 
-                    auth_token: command.result,  user: User.find_by_email(params[:email]) }
+                    auth_token: command.result,  user: UserSerializer.new(user) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end

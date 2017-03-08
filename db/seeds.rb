@@ -140,7 +140,16 @@ t5 = Trip.create(
   waytimes: ["07:26:12", "07:56:12"],
   to_work: true
   )    
-  
+
+
+d1.create_activation_digest
+d1.activate
+d2.create_activation_digest
+d2.activate
+p1.create_activation_digest
+p1.activate
+p2.create_activation_digest
+p2.activate
   
 Pool.create(user_id: d1.id, trip_id: t1.id, is_driver: true, is_active: false)
 Pool.create(user_id: p1.id, trip_id: t2.id, is_driver: false, is_active: false)

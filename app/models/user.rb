@@ -14,6 +14,7 @@ class User < ApplicationRecord
             )
   has_many :pools
   has_many :trips, through: :pools
+  attr_accessor :activation_code, :reset_code
   
   # Creates a hash of a code
   def User.digest(string)
@@ -24,7 +25,7 @@ class User < ApplicationRecord
   
   # Generates a random 6-character code
   def User.new_code
-    SecureRandom.urlsafe_base64[0..6]
+    SecureRandom.urlsafe_base64[0..5]
   end
   
   # Activates an account.
@@ -35,14 +36,14 @@ class User < ApplicationRecord
   # Sets the password reset attributes.
   def create_reset_digest
     self.reset_code = User.new_code
-    update_columns(reset_digest:User.digest(reset_code), 
+    update_columns(reset_digest: User.digest(reset_code), 
                     reset_sent_at: Time.zone.now)
   end
   
   # Sets the account activation attributes
     def create_activation_digest
       self.activation_code  = User.new_code
-      update_columns(activation_digest:User.digest(activation_code), 
+      update_columns(activation_digest: User.digest(activation_code), 
                     activation_sent_at: Time.zone.now)
     end
   
