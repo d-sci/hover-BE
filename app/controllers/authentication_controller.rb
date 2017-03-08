@@ -3,34 +3,34 @@
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_request
   
-  def login
-    command = AuthenticateUser.call(params[:email], params[:password], 'login') 
+  def authenticate
+    command = AuthenticateUser.call(params[:email], params[:password], 'authentication') 
     if command.success? 
-      user = User.find_by_email(params[:email])
-      render json: {message: "Succesfully logged in. Here is your auth_token", 
+      user = User.find_by_email(params[:email].downcase)
+      render json: {message: "Succesfully authenticated. Here is your auth_token.", 
                     auth_token: command.result, user: UserSerializer.new(user) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
   end
   
-  def account_activation
+  def activate_account
     command = AuthenticateUser.call(params[:email], params[:code], 'activation') 
     if command.success?
-      user = User.find_by_email(params[:email])
+      user = User.find_by_email(params[:email].downcase)
       user.activate
-      render json: { message: "Succesfully activated account. Here is your auth_token. Please proceed to set a password", 
+      render json: { message: "Succesfully activated account. Here is your auth_token. Please proceed to create a password.", 
                     auth_token: command.result,  user: UserSerializer.new(user) }
     else 
       render json: { error: command.errors }, status: :unauthorized 
     end
   end
   
-  def password_reset
+  def reset_password
     command = AuthenticateUser.call(params[:email], params[:code], 'reset') 
     if command.success? 
-      user = User.find_by_email(params[:email])
-      render json: { message: "Here is your auth_token. Please proceed to reset your password", 
+      user = User.find_by_email(params[:email].downcase)
+      render json: { message: "Here is your auth_token. Please proceed to reset your password.", 
                     auth_token: command.result,  user: UserSerializer.new(user) }
     else 
       render json: { error: command.errors }, status: :unauthorized 

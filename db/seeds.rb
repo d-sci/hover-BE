@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 d1 = User.create(
-  user_type: "Driver",
+  driving_pref: 1,
   first_name: "Some", 
   last_name: "Driver",
   email: "d1@example.com",
@@ -25,7 +25,7 @@ d1 = User.create(
   )
 
 d2 = User.create(
-  user_type: "Driver",
+  driving_pref: 1,
   first_name: "Another", 
   last_name: "Driver",
   email: "d2@example.com",
@@ -43,7 +43,7 @@ d2 = User.create(
   )
 
 p1 = User.create(
-  user_type: "Passenger",
+  driving_pref: -1,
   first_name: "Some", 
   last_name: "Passenger",
   email: "p1@example.com", 
@@ -60,7 +60,7 @@ p1 = User.create(
   )
   
 p2 = User.create(
-  user_type: "Passenger",
+  driving_pref: -1,
   first_name: "Another", 
   last_name: "Passenger",
   email: "p2@example.com",
@@ -77,7 +77,7 @@ p2 = User.create(
   )
 
 b1 = User.create(
-  user_type: "Both",
+  driving_pref: 0,
   first_name: "Some", 
   last_name: "Both-guy",
   email: "b1@example.com", 
@@ -94,7 +94,7 @@ b1 = User.create(
   )
   
 b2 = User.create(
-  user_type: "Both",
+  driving_pref: 0,
   first_name: "Another", 
   last_name: "Both-guy",
   email: "b2@example.com",

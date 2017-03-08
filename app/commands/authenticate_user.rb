@@ -19,7 +19,7 @@ class AuthenticateUser
   
   def user 
     user = User.find_by_email(email)
-    if action == 'login'
+    if action == 'authentication'
       return user if user && user.authenticate(code_or_password)
     else
       return user if user && user.authenticate_by_code(action, code_or_password)
