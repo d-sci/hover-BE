@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'noreply@hover.com'
+  default from: 'noreply@hovercar.to'
   layout 'mailer'
 end

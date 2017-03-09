@@ -41,10 +41,10 @@ class AuthenticationController < ApplicationController
     @user = User.find_by_email(params[:email].downcase)
     if @user && !@user.activated
       @user.create_activation_digest
-      # @user.send_activation_email    <-- to implement
+      @user.send_activation_email
       render json: {"message": "User found. Activation email sent (but actually not, here's your code)", 
                     "code": @user.activation_code}
-    elsif user
+    elsif @user
       render json: {"message":"User already activated. Did you forget your password?"}
     else
       render json: {"message":"User not found"}
@@ -55,7 +55,7 @@ class AuthenticationController < ApplicationController
     @user = User.find_by_email(params[:email].downcase)
     if @user && @user.activated
       @user.create_reset_digest
-      # @user.send_reset_email    <-- to implement
+      @user.send_reset_email
       render json: {"message": "User found. Reset email sent (but actually not, here's your code)", 
                     "code": @user.reset_code}
     elsif @user

@@ -28,9 +28,16 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64[0..5].gsub('-','0').gsub('_','9').downcase
   end
   
-  # Activates an account.
-  def activate
-    update_columns(activated: true, activated_at: Time.zone.now)
+  # Sets the account activation attributes
+    def create_activation_digest
+      self.activation_code  = User.new_code
+      update_columns(activation_digest: User.digest(activation_code), 
+                    activation_sent_at: Time.zone.now)
+    end
+    
+  # Sends account activation email
+  def send_reset_email
+    UserMailer.account_activation(self).deliver_now
   end
   
   # Sets the password reset attributes.
@@ -40,12 +47,10 @@ class User < ApplicationRecord
                     reset_sent_at: Time.zone.now)
   end
   
-  # Sets the account activation attributes
-    def create_activation_digest
-      self.activation_code  = User.new_code
-      update_columns(activation_digest: User.digest(activation_code), 
-                    activation_sent_at: Time.zone.now)
-    end
+  # Sends password reset email
+  def send_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
   
   # Authenticate a user by activation or reset code (case-insensitive)
   def authenticate_by_code(action, code)
@@ -53,6 +58,11 @@ class User < ApplicationRecord
     sent_at = self.send("#{action}_sent_at")
     return false if digest.nil? or sent_at < 2.hours.ago
     BCrypt::Password.new(digest).is_password?(code.downcase)
+  end
+  
+  # Activates an account.
+  def activate
+    update_columns(activated: true, activated_at: Time.zone.now)
   end
   
   
