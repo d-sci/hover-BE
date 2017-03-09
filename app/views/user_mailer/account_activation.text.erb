@@ -1,4 +1,8 @@
+<% if @user.first_name %>
 Hi <%= @user.first_name %>,
+<% else %>
+Hi there,
+<% end %>
 
 Thanks for joining Hover! Type in the code below on the app to activate your account. This code will be valid for 2 hours.
 
