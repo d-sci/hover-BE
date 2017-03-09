@@ -38,12 +38,12 @@ class AuthenticationController < ApplicationController
   end
   
   def register
-    user = User.find_by_email(params[:email].downcase)
-    if user && !user.activated
-      user.create_activation_digest
-      # user.send_activation_email    <-- to implement
+    @user = User.find_by_email(params[:email].downcase)
+    if @user && !@user.activated
+      @user.create_activation_digest
+      # @user.send_activation_email    <-- to implement
       render json: {"message": "User found. Activation email sent (but actually not, here's your code)", 
-                    "code": user.activation_code}
+                    "code": @user.activation_code}
     elsif user
       render json: {"message":"User already activated. Did you forget your password?"}
     else
@@ -52,13 +52,13 @@ class AuthenticationController < ApplicationController
   end
   
   def forgot_password
-    user = User.find_by_email(params[:email].downcase)
-    if user && user.activated
-      user.create_reset_digest
-      # user.send_reset_email    <-- to implement
+    @user = User.find_by_email(params[:email].downcase)
+    if @user && @user.activated
+      @user.create_reset_digest
+      # @user.send_reset_email    <-- to implement
       render json: {"message": "User found. Reset email sent (but actually not, here's your code)", 
-                    "code": user.reset_code}
-    elsif user
+                    "code": @user.reset_code}
+    elsif @user
       render json: {"message":"User has not been activated"}
     else
       render json: {"message":"User not found"}
