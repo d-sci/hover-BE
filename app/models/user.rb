@@ -36,7 +36,7 @@ class User < ApplicationRecord
     end
     
   # Sends account activation email
-  def send_reset_email
+  def send_activation_email
     UserMailer.account_activation(self).deliver_now
   end
   
