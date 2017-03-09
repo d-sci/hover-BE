@@ -13,5 +13,7 @@ Rails.application.routes.draw do
   post 'authenticate', to: 'authentication#authenticate'
   post 'activate_account', to: 'authentication#activate_account'
   post 'reset_password', to: 'authentication#reset_password'
+  post 'register', to: 'authentication#register'
+  post 'forgot_password', to: 'authentication#forgot_password'
   
 end

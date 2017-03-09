@@ -23,9 +23,9 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
   
-  # Generates a random 6-character code
+  # Generates a random 6-character code (alphanum, all lowercase)
   def User.new_code
-    SecureRandom.urlsafe_base64[0..5]
+    SecureRandom.urlsafe_base64[0..5].gsub('-','0').gsub('_','9').downcase
   end
   
   # Activates an account.
@@ -47,12 +47,12 @@ class User < ApplicationRecord
                     activation_sent_at: Time.zone.now)
     end
   
-  # Authenticate a user by activation or reset code
+  # Authenticate a user by activation or reset code (case-insensitive)
   def authenticate_by_code(action, code)
     digest = self.send("#{action}_digest")
     sent_at = self.send("#{action}_sent_at")
     return false if digest.nil? or sent_at < 2.hours.ago
-    BCrypt::Password.new(digest).is_password?(code)
+    BCrypt::Password.new(digest).is_password?(code.downcase)
   end
   
   
