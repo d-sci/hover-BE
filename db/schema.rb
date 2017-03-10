@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170308153219) do
+ActiveRecord::Schema.define(version: 20170310203936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "pools", force: :cascade do |t|
     t.boolean  "is_active"
@@ -27,11 +28,11 @@ ActiveRecord::Schema.define(version: 20170308153219) do
   end
 
   create_table "trips", force: :cascade do |t|
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.time     "waytimes",   default: [],              array: true
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.time     "waytimes",                                               default: [],              array: true
     t.boolean  "to_work"
-    t.json     "waypoints",  default: [],              array: true
+    t.geometry "waypoints",  limit: {:srid=>4326, :type=>"multi_point"}
   end
 
   create_table "users", force: :cascade do |t|
