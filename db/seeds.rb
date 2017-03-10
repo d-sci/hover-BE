@@ -36,7 +36,7 @@ d2 = User.create(
   company: "U of T", 
   position: "TA", 
   radio_stations: ["104.5", "99.1"], 
-  talkativeness: 7, 
+  talkativeness: 6, 
   smoke: true, 
   ac: true, 
   car: {"make"=>"Honda", "model"=>"Civic", "year"=>"2010", "colour":"Blue"}
