@@ -112,31 +112,31 @@ b2 = User.create(
   
 
 t1 = Trip.create(
-  waypoints: "MULTIPOINT(44.55555 -79.99999,45.444444 -78.888888)",
+  waypoints: "MULTIPOINT(-79.00000 44.00000 , -79.03000 45.03000 )",
   waytimes: ["07:26:12", "07:56:12"],
   to_work: true
   )
 
 t2 = Trip.create(
-  waypoints: "MULTIPOINT(44.55555 -79.99999,45.444444 -78.888888)",
+  waypoints: "MULTIPOINT(-79.01000 44.01000 , -79.03000 45.03000 )",
   waytimes: ["22:26:12", "22:56:12"],
   to_work: true
   )
 
 t3 = Trip.create(
-  waypoints: "MULTIPOINT(43.55555 -80.99999, 44.444444 -79.888888)",
+  waypoints: "MULTIPOINT(-79.06000 44.06000 , -79.03000 45.03000 )",
   waytimes: ["22:26:12", "22:56:12"],
   to_work: true
   )  
   
 t4 = Trip.create(
-  waypoints: "MULTIPOINT(43.55555 -80.99999, 44.444444 -79.888888)",
+  waypoints: "MULTIPOINT(-79.05000 44.05000 , -79.03000 45.03000 )",
   waytimes: ["07:26:12", "07:56:12"],
   to_work: true
   )
   
 t5 = Trip.create(
-  waypoints: "MULTIPOINT(44.55555 -79.99999,45.444444 -78.888888)",
+  waypoints: "MULTIPOINT(-79.00000 44.00000 , -79.01000 44.01000, -79.03000 45.03000 )",
   waytimes: ["07:26:12", "07:56:12"],
   to_work: true
   )    
