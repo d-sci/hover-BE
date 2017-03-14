@@ -31,5 +31,8 @@ module Hover
     
     # Load contents of lib
     config.eager_load_paths << Rails.root.join('lib') 
+    
+    # Kills timezone depreciation warning. Look more into waytimes columns when we think it may be important.
+    config.active_record.time_zone_aware_types = [:datetime, :time]
   end
 end
