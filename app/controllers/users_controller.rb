@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy, :active_trips]
+  before_action :set_user, only: [:show, :update, :destroy, :active_trips, :active_copoolers]
   before_action :confirm_correct_user, only: [:update, :destroy]
   skip_before_action :authenticate_request, only: [:create]
 
-  # GET /users
+  # GET /users    <-- not necessary
   def index
     @users = User.all
     #render json: @users    # this works but not in format Malik wants
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     render json: @user
   end
 
-  # POST /users
+  # POST /users   <-- not necessary?
   def create
     @user = User.new(user_params)
 
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
+  # DELETE /users/1     <-- not necessary?
   def destroy
     @user.destroy
   end
@@ -45,6 +45,17 @@ class UsersController < ApplicationController
   def active_trips
     @active_trips = @user.trips.where('pools.is_active': true)
     render json: @active_trips
+  end
+  
+  # GET /users/1/active_copoolers
+  def active_copoolers
+    sql = "SELECT DISTINCT ON (u.id) u.* FROM users u JOIN pools p ON p.user_id = u.id
+            WHERE p.is_active = true
+              AND p.user_id != :uid
+              AND p.trip_id in (:tids)"
+    vars = {uid: @user.id, tids: @user.trips.ids}
+    @active_copoolers = User.find_by_sql [sql,vars]
+    render json: @active_copoolers
   end
   
   private

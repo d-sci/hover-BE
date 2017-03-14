@@ -1,14 +1,14 @@
 class TripsController < ApplicationController
   before_action :set_trip, only: [:show, :update, :destroy, :active_users]
 
-  # GET /trips
+  # GET /trips        <-- not necessary
   def index
     @trips = Trip.all
 
     render json: @trips
   end
 
-  # GET /trips/1
+  # GET /trips/1        
   def show
     render json: @trip
   end
@@ -18,6 +18,8 @@ class TripsController < ApplicationController
     @trip = Trip.new(trip_params)
 
     if @trip.save
+      #also create the pool, and link to current user
+      Pool.create(user_id: @current_user.id, trip_id: @trip.id, is_active: true)
       render json: @trip, status: :created, location: @trip
     else
       render json: @trip.errors, status: :unprocessable_entity
@@ -33,7 +35,7 @@ class TripsController < ApplicationController
     end
   end
 
-  # DELETE /trips/1
+  # DELETE /trips/1   <-- not necessary?
   def destroy
     @trip.destroy
   end

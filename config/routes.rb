@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
   resources :users do
     member do
-      get :active_trips
+      get :active_trips, :active_copoolers
     end
   end
   post 'authenticate', to: 'authentication#authenticate'
