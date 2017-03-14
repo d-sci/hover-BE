@@ -40,9 +40,7 @@ class TripsController < ApplicationController
   
   # GET /trips/1/active_users
   def active_users
-    sql = "select u.* from users u join pools p on u.id = p.user_id where p.trip_id = :tid and p.is_active = true"
-    vars = {tid: @trip.id}
-    @active_users = User.find_by_sql [sql, vars]
+    @active_users = @trip.users.where('pools.is_active': true)
     render json: @active_users
   end
 
