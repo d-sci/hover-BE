@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  get 'requests/new'
-
+  
+  # Don't actually need many of these, especially pools
+  resources :requests
   resources :pools
   resources :trips  do
     member do
