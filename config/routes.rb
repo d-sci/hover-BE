@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'requests/new'
+
   resources :pools
   resources :trips  do
     member do
