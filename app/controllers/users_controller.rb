@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users    <-- not necessary
   def index
     @users = User.all
-    render json: {users: UserSerializer.new(@users)}    # I think this works
+    render json: @users
   end
 
   # GET /users/1
