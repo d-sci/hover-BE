@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170317060621) do
+ActiveRecord::Schema.define(version: 20170323185947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,7 +23,9 @@ ActiveRecord::Schema.define(version: 20170317060621) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "is_driver"
+    t.boolean  "is_pending"
     t.index ["trip_id"], name: "index_pools_on_trip_id", using: :btree
+    t.index ["user_id", "trip_id"], name: "index_pools_on_user_id_and_trip_id", using: :btree
     t.index ["user_id"], name: "index_pools_on_user_id", using: :btree
   end
 
@@ -32,8 +34,9 @@ ActiveRecord::Schema.define(version: 20170317060621) do
     t.integer  "to_user_id"
     t.integer  "from_trip_id"
     t.integer  "to_trip_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "status",       default: "pending"
     t.index ["from_user_id", "to_user_id"], name: "index_requests_on_from_user_id_and_to_user_id", using: :btree
     t.index ["from_user_id"], name: "index_requests_on_from_user_id", using: :btree
     t.index ["to_user_id"], name: "index_requests_on_to_user_id", using: :btree
@@ -45,6 +48,9 @@ ActiveRecord::Schema.define(version: 20170317060621) do
     t.time     "waytimes",                                               default: [],              array: true
     t.boolean  "to_work"
     t.geometry "waypoints",  limit: {:srid=>4326, :type=>"multi_point"}
+    t.integer  "order",                                                  default: [],              array: true
+    t.boolean  "confirmed",                                              default: [],              array: true
+    t.integer  "base_trips",                                             default: [],              array: true
   end
 
   create_table "users", force: :cascade do |t|
