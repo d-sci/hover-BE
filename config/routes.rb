@@ -24,4 +24,10 @@ Rails.application.routes.draw do
   # Matching
   post 'find_match', to: 'matching#find_match'
   
+  # Dashboard
+  get 'active_trips', to: 'dashboard#active_trips'
+  get 'pending_trips', to: 'dashboard#pending_trips'
+  get 'in_requests', to: 'dashboard#in_requests'
+  get 'out_requests', to: 'dashboard#out_requests'
+  
 end
