@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170323185947) do
+ActiveRecord::Schema.define(version: 20170323211238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 20170323185947) do
     t.integer  "trip_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean  "is_driver"
     t.boolean  "is_pending"
     t.index ["trip_id"], name: "index_pools_on_trip_id", using: :btree
     t.index ["user_id", "trip_id"], name: "index_pools_on_user_id_and_trip_id", using: :btree
@@ -51,6 +50,7 @@ ActiveRecord::Schema.define(version: 20170323185947) do
     t.integer  "order",                                                  default: [],              array: true
     t.boolean  "confirmed",                                              default: [],              array: true
     t.integer  "base_trips",                                             default: [],              array: true
+    t.integer  "driver_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -29,6 +29,7 @@ class RequestsController < ApplicationController
     if @request.update(request_params)
       # for accepted request, make the trip
       if @request.status == "accepted"
+        # choose driver based on logic. if both 0s, pick requestee.
         to_driving_pref = @request.to_user.driving_pref
         from_driving_pref = @request.from_user.driving_pref
         if to_driving_pref > from_driving_pref
@@ -38,7 +39,7 @@ class RequestsController < ApplicationController
         else
           driver = @request.to_user_id
         end
-        
+        # points and times are d1,p1,p2,d2 (tho will require editing) 
         factory = RGeo::Cartesian.factory(:srid => 4326)
         to_points = Trip.find(@request.to_trip_id).waypoints
         from_points = Trip.find(@request.from_trip_id).waypoints
@@ -46,12 +47,14 @@ class RequestsController < ApplicationController
         from_times= Trip.find(@request.from_trip_id).waytimes
         if driver == @request.to_user_id
           waypoints = factory.multi_point([to_points[0], from_points[0], from_points[1], to_points[1]])
-          waytimes = factory.multi_point([to_times[0], from_times[0], from_times[1], to_times[1]])
+          waytimes = [to_times[0], from_times[0], from_times[1], to_times[1]]
         else
           waypoints = factory.multi_point([from_points[0], to_points[0], to_points[1], from_points[1]])
-          waytimes = factory.multi_point([from_times[0], to_times[0], to_times[1], from_times[1]])
+          waytimes = [from_times[0], to_times[0], to_times[1], from_times[1]]
         end
+        # create the trip and pools (pending, not active)
         @trip = Trip.create(
+            driver_id: driver,
             waypoints: waypoints,
             waytimes: waytimes,
             to_work: Trip.find(@request.to_trip_id).to_work,
@@ -59,17 +62,8 @@ class RequestsController < ApplicationController
             confirmed: [false, false],
             base_trips:[@request.to_trip_id, @request.from_trip_id]
             )
-            
-        p1 = Pool.create(user_id: @request.to_user_id, trip_id: @trip.id, is_active: false, is_pending: true)
-        p2 = Pool.create(user_id: @request.from_user_id, trip_id: @trip.id, is_active: false, is_pending: true)
-        
-        if driver == @request.to_user_id
-          p1.update(is_driver: true)
-          p2.update(is_driver: false)
-        else
-          p2.update(is_driver: true)
-          p1.update(is_driver: false)
-        end
+        Pool.create(user_id: @request.to_user_id, trip_id: @trip.id, is_active: false, is_pending: true)
+        Pool.create(user_id: @request.from_user_id, trip_id: @trip.id, is_active: false, is_pending: true)
       end
       render json: @request
     else
