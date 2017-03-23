@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :pools
   resources :trips  do
     member do
-      get :active_users
+      get :active_users, :confirm
     end
   end
   resources :users do

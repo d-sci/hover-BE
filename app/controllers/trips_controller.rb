@@ -1,5 +1,5 @@
 class TripsController < ApplicationController
-  before_action :set_trip, only: [:show, :update, :destroy, :active_users]
+  before_action :set_trip, only: [:show, :update, :destroy, :active_users, :confirm]
 
   # GET /trips        <-- not necessary
   def index
@@ -29,6 +29,8 @@ class TripsController < ApplicationController
   # PATCH/PUT /trips/1
   def update
     if @trip.update(trip_params)
+      n = @trip.confirmed.size
+      @trip.update_columns(confirmed: [false]*n)
       render json: @trip
     else
       render json: @trip.errors, status: :unprocessable_entity
@@ -38,6 +40,24 @@ class TripsController < ApplicationController
   # DELETE /trips/1   <-- not necessary?
   def destroy
     @trip.destroy
+  end
+  
+  # GET /trips/1/confirm
+  def confirm
+    # this user confirms the trip
+    u = @trip.order.index(@current_user.id)
+    temp = @trip.confirmed
+    temp[u] = true
+    @trip.update_columns(confirmed: temp)
+    
+    # now check if they've both been confirmed since last edit
+    # if so, can go ahead and make the trip live
+    if @trip.confirmed.all?
+      @trip.confirmed.size.times do |i|
+        Pool.find_by_user_id_and_trip_id(@trip.order[i], @trip.base_trips[i]).update(is_active: false)
+        Pool.find_by_user_id_and_trip_id(@trip.order[i], @trip.id).update(is_active: true, is_pending: false)
+      end
+    end
   end
   
   # GET /trips/1/active_users
