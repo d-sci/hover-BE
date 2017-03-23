@@ -58,6 +58,7 @@ class TripsController < ApplicationController
         Pool.find_by_user_id_and_trip_id(@trip.order[i], @trip.id).update(is_active: true, is_pending: false)
       end
     end
+    render json: @trip
   end
   
   # GET /trips/1/active_users
