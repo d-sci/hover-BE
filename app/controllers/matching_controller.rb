@@ -2,7 +2,7 @@ class MatchingController < ApplicationController
   
   def find_match
     @current_trip = Trip.find(params[:trip_id])
-    if @current_trip[:to_work]
+    if @current_trip.to_work
       origin_dist = 5000
       destination_dist = 1000
     else
@@ -18,7 +18,7 @@ class MatchingController < ApplicationController
             ST_DWithin( ST_geometryN(t.waypoints, 2)::geography , :destination::geography, :destination_dist )
             limit 20"
     vars = {
-      uid: @current_user.id, driving_pref: @current_user[:driving_pref], to_work: @current_trip[:to_work],
+      uid: @current_user.id, driving_pref: @current_user.driving_pref, to_work: @current_trip.to_work,
       origin: @current_trip.waypoints[0], destination: @current_trip.waypoints[1],
       origin_dist: origin_dist, destination_dist: destination_dist
       }
@@ -40,7 +40,7 @@ class MatchingController < ApplicationController
     matches = []
     @matched_trips.each do |trip|
       @matched_user = trip.users.first
-      @match = {trip: TripSerializer.new(trip), user_id: @matched_user[:id], user_name: @matched_user[:first_name], compat: compat(@current_user, @matched_user)}
+      @match = {trip: TripSerializer.new(trip), user_id: @matched_user.id, user_name: @matched_user.first_name, compat: compat(@current_user, @matched_user)}
       matches << @match
     end
     matches.sort_by!{|x| -x[:compat]}
