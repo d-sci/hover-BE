@@ -17,6 +17,7 @@ class User < ApplicationRecord
   has_many :in_requests, class_name: "Request", foreign_key: "to_user_id"
   has_many :out_requests, class_name: "Request", foreign_key: "from_user_id"
   mount_base64_uploader :avatar, AvatarUploader
+  validate :avatar_size
   
   
   attr_accessor :activation_code, :reset_code
@@ -70,5 +71,13 @@ class User < ApplicationRecord
     update_columns(activated: true, activated_at: Time.zone.now)
   end
   
+  
+  private
+    # Validates the size of an uploaded avatar.
+    def avatar_size
+      if avatar.size > 1.megabyte
+        errors.add(:avatar, "should be less than 1MB")
+      end
+    end
   
 end
