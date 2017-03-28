@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :trips, through: :pools
   has_many :in_requests, class_name: "Request", foreign_key: "to_user_id"
   has_many :out_requests, class_name: "Request", foreign_key: "from_user_id"
+  mount_base64_uploader :avatar, AvatarUploader
   
   
   attr_accessor :activation_code, :reset_code

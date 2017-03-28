@@ -17,6 +17,8 @@ require 'active_record/connection_adapters/postgis_adapter'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+require 'carrierwave'
+require 'carrierwave/orm/activerecord'
 
 module Hover
   class Application < Rails::Application
