@@ -3,11 +3,11 @@ class MatchingController < ApplicationController
   def find_match
     @current_trip = Trip.find(params[:trip_id])
     if @current_trip.to_work
-      origin_dist = 5000
+      origin_dist = 8000
       destination_dist = 1000
     else
       origin_dist = 1000
-      destination_dist = 5000
+      destination_dist = 8000
     end
   
     sql = "select * from trips t join pools p on p.trip_id = t.id join users u on p.user_id = u.id
@@ -32,24 +32,25 @@ class MatchingController < ApplicationController
     # - the match trip's origin is within [origin_dist] of the current trip's origin (note the difference in indexing!)
     # - the match trip's destination is [destination_dist] 1km of the current trip's destination
     
+    # ATM TIMES NEVER CONSIDERED ANYWHERE
+    # SHOULD FILTER IN DB BASED ON TIME/LOCATIONS (POSSIBLY ORDER AND LIMIT), THEN ALSO COMPUTE COMPAT AND ORDER RESULTS SOMEHOW
     # SHOULD HAVE SOME WAY OF RELAXING IF NOT ENOUGH RESULTS / BEING MORE PICKY IF TOO MANY.
-    # ALSO TIMES NEVER CONSIDERED ANYWHERE
     # ALSO SHOULD PRIORITIZE EXISTING MATCHES SOMEWHERE SOMEHOW
     
     @matched_trips = Trip.find_by_sql [sql, vars]
     matches = []
     @matched_trips.each do |trip|
       @matched_user = trip.users.first
-      @match = {trip: TripSerializer.new(trip), user_id: @matched_user.id, user_name: @matched_user.first_name, compat: compat(@current_user, @matched_user)}
+      @match = {
+          trip: TripSerializer.new(trip), 
+          user_id: @matched_user.id, 
+          user_name: @matched_user.first_name, 
+          compat: @current_user.compatibility(@matched_user)
+      }
       matches << @match
     end
     matches.sort_by!{|x| -x[:compat]}
     render json: matches
   end
     
-  private
-    def compat(u1, u2)
-      #TODO
-      Random.rand(50..100)
-    end
 end

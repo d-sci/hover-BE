@@ -17,7 +17,6 @@ class User < ApplicationRecord
   has_many :in_requests, class_name: "Request", foreign_key: "to_user_id"
   has_many :out_requests, class_name: "Request", foreign_key: "from_user_id"
   mount_base64_uploader :avatar, AvatarUploader
-  validate :avatar_size
   
   
   attr_accessor :activation_code, :reset_code
@@ -71,13 +70,25 @@ class User < ApplicationRecord
     update_columns(activated: true, activated_at: Time.zone.now)
   end
   
-  
-  private
-    # Validates the size of an uploaded avatar.
-    def avatar_size
-      if avatar.size > 1.megabyte
-        errors.add(:avatar, "should be less than 1MB")
-      end
+  # Compatability between users, based only on their preferences (quite arbitrary atm)
+  def compatibility(other)
+    compat = 100
+    compat -= 4 unless driving_pref + other.driving_pref == 0
+    compat -= 5 if gender != other.gender
+    compat -= 6 if company != other.company
+    compat -= 3*(talkativeness-other.talkativeness).abs
+    compat -= 20 if smoke != other.smoke
+    compat -= 10 if ac != other.ac
+    if radio_stations.length >= other.radio_stations.length
+      stations1 = radio_stations
+      stations2 = other.radio_stations
+    else
+      stations1 = other.radio_stations
+      stations2 = radio_stations
     end
+    stations1.each {|s| compat -= 1 unless stations2.include?(s)}
+    return compat
+  end
+  
   
 end
