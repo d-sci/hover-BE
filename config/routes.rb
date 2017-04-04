@@ -29,5 +29,6 @@ Rails.application.routes.draw do
   get 'pending_trips', to: 'dashboard#pending_trips'
   get 'in_requests', to: 'dashboard#in_requests'
   get 'out_requests', to: 'dashboard#out_requests'
+  get 'full_dashboard', to: 'dashboard#full_dashboard'
   
 end
