@@ -16,7 +16,7 @@ models = {"Honda"=>"Civic", "Toyota"=>"Corolla", "BMW"=>"x5", "Volvo"=>"V70"}
 colours = ["Black", "White", "Silver", "Blue", "Red"]
 
 # Make the (already activated) users
-24.times do |n|
+60.times do |n|
   
   password = "password"
   gender = genders.sample
@@ -26,19 +26,16 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
     first_name = f_names.sample
   end
   last_name = last_names.sample
-  has_avatar = [true, false].sample
+  #has_avatar = [true, false].sample
+  email = "u#{n+1}@example.com"
   phone = "416-"+Random.rand(100..999).to_s+"-"+Random.rand(1000..9999).to_s
   company = companies.sample
   position = positions.sample
+  driving_pref = Random.rand(-1..1)
   radio_stations = radio_stations_s.sample(Random.rand(5))
   talkativeness = Random.rand(10)
-  smoke = [true, false].sample
-  ac = [true, false].sample
-  
-  driving_pref = Random.rand(-1..1)
-  driving_hash = {-1=>'p',0=>'b',1=>'d'}
-  prefix = driving_hash[driving_pref]
-  email = "#{prefix}#{n+1}@example.com"
+  smoke = [true, false, false, false].sample
+  ac = [true, true, true, false].sample
   if driving_pref >= 0
     make = makes.sample
     model = models[make]
@@ -52,7 +49,7 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
     password_confirmation: password,
     first_name: first_name, 
     last_name: last_name,
-    has_avatar: has_avatar,
+    #has_avatar: has_avatar,
     email: email,
     phone: phone, 
     gender: gender, 
@@ -78,13 +75,15 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
   t1 = Trip.create(
     waypoints: "MULTIPOINT(#{lon} #{lat}, #{office})",
     waytimes: [time1a, time1b],
-    to_work: true
+    to_work: true,
+    driver_id: 0
     )
   Pool.create(user_id: u.id, trip_id: t1.id, is_active: true)
   t2 = Trip.create(
     waypoints: "MULTIPOINT(#{office}, #{lon} #{lat})",
     waytimes: [time2a, time2b],
-    to_work: false
+    to_work: false,
+    driver_id: 0
     )
   Pool.create(user_id: u.id, trip_id: t2.id, is_active: true)
 
@@ -92,7 +91,7 @@ end
 
   
 # Make some extra (non-activated) users
-6.times do |n|
+9.times do |n|
   password = "password"
   gender = genders.sample
   if gender == 'M'
