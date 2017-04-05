@@ -4,13 +4,13 @@ class AvatarUploader < CarrierWave::Uploader::Base
   
   process :resize_to_fill => [200, 200, :north]
 
-  version :thumbnail do
-    process :eager => true
-    process :resize_to_fit => [50, 50]
-  end
+  # version :thumbnail do
+  #   process :eager => true
+  #   process :resize_to_fit => [50, 50]
+  # end
   
   def default_url(*args)
-    "image/upload/v1491360145/tvbpkgw4bic5l0eijqrs.jpg"  #the dummy avatar, uploaded via u1
+    "http://res.cloudinary.com/hiupbvr0y/image/upload/v1491360145/tvbpkgw4bic5l0eijqrs.jpg"  #the dummy avatar, uploaded via u1
   end
   
   
