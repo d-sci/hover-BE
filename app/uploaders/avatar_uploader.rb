@@ -9,6 +9,11 @@ class AvatarUploader < CarrierWave::Uploader::Base
     process :resize_to_fit => [50, 50]
   end
   
+  def default_url(*args)
+    "image/upload/v1491360145/tvbpkgw4bic5l0eijqrs.jpg"  #the dummy avatar, uploaded via u1
+  end
+  
+  
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
