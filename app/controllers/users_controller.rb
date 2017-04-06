@@ -39,23 +39,6 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
-  # GET /users/1/active_trips
-  def active_trips
-    @active_trips = @user.trips.where('pools.is_active': true)
-    render json: @active_trips
-  end
-  
-  # GET /users/1/active_copoolers
-  def active_copoolers
-    sql = "SELECT DISTINCT ON (u.id) u.* FROM users u JOIN pools p ON p.user_id = u.id
-            WHERE p.is_active = true
-              AND p.user_id != :uid
-              AND p.trip_id in (:tids)"
-    vars = {uid: @user.id, tids: @user.trips.ids}
-    @active_copoolers = User.find_by_sql [sql,vars]
-    render json: @active_copoolers
-  end
-  
   private
     # Defines the user based on the URL
     def set_user

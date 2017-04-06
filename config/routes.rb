@@ -8,11 +8,7 @@ Rails.application.routes.draw do
       get :active_users, :confirm
     end
   end
-  resources :users do
-    member do
-      get :active_trips, :active_copoolers
-    end
-  end
+  resources :users
   
   # Authentication
   post 'authenticate', to: 'authentication#authenticate'
@@ -25,8 +21,9 @@ Rails.application.routes.draw do
   post 'find_match', to: 'matching#find_match'
   
   # Dashboard
-  get 'active_trips', to: 'dashboard#active_trips'
-  get 'pending_trips', to: 'dashboard#pending_trips'
+  get 'active_carpools', to: 'dashboard#active_carpools'
+  get 'pending_carpools', to: 'dashboard#pending_carpools'
+  get 'personal_trips', to: 'dashboard#personal_trips'
   get 'in_requests', to: 'dashboard#in_requests'
   get 'out_requests', to: 'dashboard#out_requests'
   get 'full_dashboard', to: 'dashboard#full_dashboard'

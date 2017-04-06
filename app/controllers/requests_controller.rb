@@ -1,14 +1,14 @@
 class RequestsController < ApplicationController
   before_action :set_request, only: [:show, :update, :destroy]
 
-  # GET /requests
+  # GET /requests <-- not necessary
   def index
     @requests = Request.all
 
     render json: @requests
   end
 
-  # GET /requests/1
+  # GET /requests/1  <-- not necessary
   def show
     render json: @request
   end

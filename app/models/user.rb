@@ -90,5 +90,30 @@ class User < ApplicationRecord
     return compat
   end
   
+  # Return all the people you are in active carpools with. Potentially useful but not yet used.
+  def active_copoolers
+    sql = "SELECT DISTINCT ON (u.id) u.* FROM users u JOIN pools p ON p.user_id = u.id
+            WHERE p.is_active = true
+              AND p.user_id != :uid
+              AND p.trip_id in (:tids)"
+    vars = {uid: id, tids: trips.ids}
+    @active_copoolers = User.find_by_sql [sql,vars]
+  end
+  
+  # Return your active carpool trips
+  def active_carpools
+    @active_carpools = trips.where('pools.is_active': true).where.not(driver_id: 0)
+  end
+  
+  # Return your pending carpool trips
+  def pending_carpools
+    @pending_carpools = trips.where('pools.is_pending': true)
+  end
+  
+  # Return your personal trips, active or not
+  def personal_trips
+    @personal_trips = trips.where(driver_id: 0)
+  end
+  
   
 end

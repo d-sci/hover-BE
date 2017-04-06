@@ -1,3 +1,5 @@
+# THIS IS REALLY NOT NECESSARY AT ALL
+
 class PoolsController < ApplicationController
   before_action :set_pool, only: [:show, :update, :destroy]
 

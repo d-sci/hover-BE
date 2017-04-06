@@ -44,7 +44,8 @@ class MatchingController < ApplicationController
       @match = {
           trip: TripSerializer.new(trip), 
           user_id: @matched_user.id, 
-          user_name: @matched_user.first_name, 
+          user_name: @matched_user.first_name,
+          user_avatar: @matched_user.avatar.url,
           compat: @current_user.compatibility(@matched_user)
       }
       matches << @match
