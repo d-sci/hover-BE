@@ -26,7 +26,6 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
     first_name = f_names.sample
   end
   last_name = last_names.sample
-  #has_avatar = [true, false].sample
   email = "u#{n+1}@example.com"
   phone = "416-"+Random.rand(100..999).to_s+"-"+Random.rand(1000..9999).to_s
   company = companies.sample
@@ -41,7 +40,7 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
     model = models[make]
     car = {"make"=>make, "model"=>model, "year"=>Random.rand(2000..2017).to_s, "colour"=>colours.sample}
   else
-    car = nil
+    car = {}
   end
   
   u = User.create(
@@ -49,7 +48,6 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
     password_confirmation: password,
     first_name: first_name, 
     last_name: last_name,
-    #has_avatar: has_avatar,
     email: email,
     phone: phone, 
     gender: gender, 
@@ -75,15 +73,13 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
   t1 = Trip.create(
     waypoints: "MULTIPOINT(#{lon} #{lat}, #{office})",
     waytimes: [time1a, time1b],
-    to_work: true,
-    driver_id: 0
+    to_work: true
     )
   Pool.create(user_id: u.id, trip_id: t1.id, is_active: true)
   t2 = Trip.create(
     waypoints: "MULTIPOINT(#{office}, #{lon} #{lat})",
     waytimes: [time2a, time2b],
-    to_work: false,
-    driver_id: 0
+    to_work: false
     )
   Pool.create(user_id: u.id, trip_id: t2.id, is_active: true)
 
@@ -91,7 +87,7 @@ end
 
   
 # Make some extra (non-activated) users
-9.times do |n|
+40.times do |n|
   password = "password"
   gender = genders.sample
   if gender == 'M'
