@@ -63,8 +63,7 @@ class TripsController < ApplicationController
   
   # GET /trips/1/active_users
   def active_users
-    @active_users = @trip.users.where('pools.is_active': true)
-    render json: @active_users
+    render json: @trip.active_users
   end
 
   private
