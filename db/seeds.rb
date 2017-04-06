@@ -66,10 +66,10 @@ colours = ["Black", "White", "Silver", "Blue", "Red"]
   lon = (-79.5 + Random.rand(0.3)).round(6)
   lat = (43.6 + Random.rand(0.1)).round(6)
   office = locs[company]
-  time1a = ["07","08"].sample + ":" + ["00","15","30","45"].sample + ":00"
+  time1a = ["07","08"].sample + ":" + ["00","15","30","45"].sample
   time1b = "0" + (time1a[1].to_i+1).to_s + time1a[2..-1]
-  time2a = ["04","05"].sample + ":" + ["00","15","30","45"].sample + ":00"
-  time2b = "0" + (time2a[1].to_i+1).to_s + time2a[2..-1]
+  time2a = ["16","17"].sample + ":" + ["00","15","30","45"].sample
+  time2b = "1" + (time2a[1].to_i+1).to_s + time2a[2..-1]
   t1 = Trip.create(
     waypoints: "MULTIPOINT(#{lon} #{lat}, #{office})",
     waytimes: [time1a, time1b],
