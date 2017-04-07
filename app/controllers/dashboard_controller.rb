@@ -33,8 +33,8 @@ class DashboardController < ApplicationController
       active_carpools: ActiveModelSerializers::SerializableResource.new(@active_carpools, each_serializer: TripSerializer),
       pending_carpools: ActiveModelSerializers::SerializableResource.new(@pending_carpools, each_serializer: TripSerializer),
       personal_trips: ActiveModelSerializers::SerializableResource.new(@personal_trips, each_serializer: TripSerializer),
-      in_requests: @in_requests,
-      out_requests: @out_requests
+      in_requests: ActiveModelSerializers::SerializableResource.new(@in_requests, each_serializer: RequestSerializer),
+      out_requests: ActiveModelSerializers::SerializableResource.new(@out_requests, each_serializer: RequestSerializer),
     }
   end
 end

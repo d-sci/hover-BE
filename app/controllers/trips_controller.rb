@@ -45,18 +45,11 @@ class TripsController < ApplicationController
   # GET /trips/1/confirm
   def confirm
     # this user confirms the trip
-    u = @trip.order.index(@current_user.id)
-    temp = @trip.confirmed
-    temp[u] = true
-    @trip.update_columns(confirmed: temp)
-    
+    @current_user.confirm_trip(@trip)
     # now check if they've both been confirmed since last edit
     # if so, can go ahead and make the trip live
     if @trip.confirmed.all?
-      @trip.confirmed.size.times do |i|
-        Pool.find_by_user_id_and_trip_id(@trip.order[i], @trip.base_trips[i]).update(is_active: false)
-        Pool.find_by_user_id_and_trip_id(@trip.order[i], @trip.id).update(is_active: true, is_pending: false)
-      end
+      @trip.activate_pending
     end
     render json: @trip
   end
