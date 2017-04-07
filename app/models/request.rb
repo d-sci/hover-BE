@@ -6,7 +6,7 @@ class Request < ApplicationRecord
   validates :from_user_id, presence: true
   validates :from_trip_id, presence: true
   
-  # Make a pending trip after request is accepted
+  # Make (and return) a pending trip after request is accepted
   def create_pending_trip
     # choose driver based on logic. if both 0s, pick requestee.
     to_driving_pref = to_user.driving_pref
@@ -43,5 +43,6 @@ class Request < ApplicationRecord
         )
     Pool.create(user_id: to_user_id, trip_id: @trip.id, is_active: false, is_pending: true)
     Pool.create(user_id: from_user_id, trip_id: @trip.id, is_active: false, is_pending: true)
+    return @trip
   end
 end
