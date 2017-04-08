@@ -56,7 +56,7 @@ class TripsController < ApplicationController
   
   # GET /trips/1/active_users
   def active_users
-    render json: @trip.active_users
+    render json: {active_users: ActiveModelSerializers::SerializableResource.new(@trip.active_users, each_serializer: UserSerializer)}
   end
 
   private

@@ -1,25 +1,25 @@
 class DashboardController < ApplicationController
  
   def active_carpools
-    render json: @current_user.active_carpools
+    render json: {active_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.active_carpools, each_serializer: TripSerializer)}
   end
   
   def pending_carpools
-    render json: @current_user.pending_carpools
+    render json: {pending_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.pending_carpools, each_serializer: TripSerializer)}
   end
   
   def personal_trips
-    render json: @current_user.personal_trips
+    render json: {personal_trips: ActiveModelSerializers::SerializableResource.new(@current_user.personal_trips, each_serializer: TripSerializer)}
   end
   
   def in_requests
     @in_requests = @current_user.in_requests.where(status: 'pending').order(:updated_at)
-    render json: @in_requests
+    render json: {in_requests: ActiveModelSerializers::SerializableResource.new(@in_requests, each_serializer: RequestSerializer)}
   end
   
   def out_requests
     @out_requests = @current_user.out_requests.order(:updated_at)
-    render json: @out_requests
+    render json: {out_requests: ActiveModelSerializers::SerializableResource.new(@out_requests, each_serializer: RequestSerializer)}
   end
   
   def full_dashboard
