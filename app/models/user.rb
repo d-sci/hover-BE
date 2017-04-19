@@ -123,7 +123,7 @@ class User < ApplicationRecord
     trip.update_columns(confirmed: temp)
   end
   
-  # Return your matches (trips plus basic user info) for your specified trip
+  # Return your matches (compatible trips objects) for your specified trip
   def matches(trip)
     if trip.to_work
       origin_dist = 8000
@@ -132,20 +132,16 @@ class User < ApplicationRecord
       origin_dist = 1000
       destination_dist = 8000
     end
-  
-    sql = "select * from trips t join pools p on p.trip_id = t.id join users u on p.user_id = u.id
-        where p.is_active = true and u.id != :uid and
-            (u.driving_pref = 0 or u.driving_pref != :driving_pref) and t.to_work = :to_work and 
-            ST_NumGeometries(t.waypoints) = 2 and
-            ST_DWithin( ST_geometryN(t.waypoints, 1)::geography , :origin::geography, :origin_dist ) and
-            ST_DWithin( ST_geometryN(t.waypoints, 2)::geography , :destination::geography, :destination_dist )
-            limit 20"
-    vars = {
-      uid: id, driving_pref: driving_pref, to_work: trip.to_work,
-      origin: trip.waypoints[0], destination: trip.waypoints[1],
-      origin_dist: origin_dist, destination_dist: destination_dist
-      }
-    
+    @matches = Trip.joins(:users).
+      where(pools: { is_active: true}).
+      where.not(users: { id: id}).
+      where("users.driving_pref = 0 OR driving_pref != ?", driving_pref).
+      where(trips: {to_work: trip.to_work}).
+      where("ST_NumGeometries(trips.waypoints) = 2").
+      where("ST_DWithin( ST_geometryN(trips.waypoints, 1)::geography , ?::geography, ? )", trip.waypoints[0], origin_dist).
+      where("ST_DWithin( ST_geometryN(trips.waypoints, 2)::geography , ?::geography, ? )", trip.waypoints[1], destination_dist).
+      limit(20)
+
       # This gets up to 20 trips where (in order):
       # - the match user is actively taking this trip
       # - the match user isn't the current user
@@ -160,22 +156,8 @@ class User < ApplicationRecord
       # SHOULD HAVE SOME WAY OF RELAXING IF NOT ENOUGH RESULTS / BEING MORE PICKY IF TOO MANY.
       # ALSO SHOULD PRIORITIZE EXISTING MATCHES SOMEWHERE SOMEHOW
     
-    @matched_trips = Trip.find_by_sql [sql, vars]
-    @matches = []
-    @matched_trips.each do |t|
-      @matched_user = t.users.first
-      @match = {
-          trip: TripSerializer.new(t), 
-          user_id: @matched_user.id, 
-          user_name: @matched_user.first_name,
-          user_avatar: @matched_user.avatar.url,
-          compat: compatibility(@matched_user)
-      }
-      @matches << @match
-    end
-    @matches.sort_by!{|x| -x[:compat]}
+    @matches = @matches.sort_by{|t| -compatibility(t.users.first)} #right now sorting by compatability with first user
     return @matches
-    
   end
   
   

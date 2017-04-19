@@ -7,15 +7,12 @@ class UserSerializer < ActiveModel::Serializer
     object.avatar.url
   end
   
-  # include compatibility with current app user, when that info is provided
+  # include compatibility with current app user, which is "scope"
+  # --> render json: @xxx  passes in @current_user to scope automatically
+  # --> render json: {xxx: Serializer.new(@xxx)} doesn't, need to say render json: {xxx: Serializer.new(@xxx, scope: @current_user)}
+  # --> if somehow not included, fallback to 0
   def compat
-    #if instance_options[:current_user]   #pass it in when doing Serializer.new()
-      #return object.compatibility(instance_options[:current_user])
-    if scope  #otherwise it's included by default in scope
-      return object.compatibility(scope)
-    else
-      return 0
-    end
+    scope ? object.compatibility(scope) : 0
   end
   
 end
