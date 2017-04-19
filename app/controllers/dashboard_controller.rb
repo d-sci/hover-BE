@@ -1,15 +1,15 @@
 class DashboardController < ApplicationController
  
   def active_carpools
-    render json: {active_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.active_carpools, each_serializer: TripSerializer)}
+    render json: {active_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.active_carpools, each_serializer: TripSerializer, scope: @current_user)}
   end
   
   def pending_carpools
-    render json: {pending_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.pending_carpools, each_serializer: TripSerializer)}
+    render json: {pending_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.pending_carpools, each_serializer: TripSerializer, scope: @current_user)}
   end
 
   def personal_trips
-    render json: {personal_trips: ActiveModelSerializers::SerializableResource.new(@current_user.personal_trips, each_serializer: TripSerializer)}
+    render json: {personal_trips: ActiveModelSerializers::SerializableResource.new(@current_user.personal_trips, each_serializer: TripSerializer, scope: @current_user)}
   end
   
   def in_requests
@@ -19,7 +19,7 @@ class DashboardController < ApplicationController
   
   def out_requests
     @out_requests = @current_user.out_requests.order(:updated_at)
-     render json: {out_requests: request_data(@out_requests, false)}
+    render json: {out_requests: request_data(@out_requests, false)}
   end
   
   def full_dashboard
@@ -27,9 +27,9 @@ class DashboardController < ApplicationController
     @out_requests = @current_user.out_requests.order(:updated_at)
     render json: {
       user: UserSerializer.new(@current_user),
-      active_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.active_carpools, each_serializer: TripSerializer),
-      pending_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.pending_carpools, each_serializer: TripSerializer),
-      personal_trips: ActiveModelSerializers::SerializableResource.new(@current_user.personal_trips, each_serializer: TripSerializer),
+      active_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.active_carpools, each_serializer: TripSerializer, scope: @current_user),
+      pending_carpools: ActiveModelSerializers::SerializableResource.new(@current_user.pending_carpools, each_serializer: TripSerializer, scope: @current_user),
+      personal_trips: ActiveModelSerializers::SerializableResource.new(@current_user.personal_trips, each_serializer: TripSerializer, scope: @current_user),
       in_requests: request_data(@in_requests, true),
       out_requests: request_data(@out_requests, false)
     }
@@ -51,8 +51,8 @@ class DashboardController < ApplicationController
         @request = {
           id: r.id,
           status: r.status,
-          other_trip: TripSerializer.new(@other_trip),
-          my_trip: TripSerializer.new(@my_trip)
+          other_trip: TripSerializer.new(@other_trip, scope: @current_user),
+          my_trip: TripSerializer.new(@my_trip, scope: @current_user)
         }
         data << @request
       end
