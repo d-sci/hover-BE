@@ -51,10 +51,13 @@ class UsersController < ApplicationController
     end
 
     # Only allow a trusted parameter "white list" through.
+    # NB for arrays/hashes, need special syntax as below
     def user_params
-      params.require(:user).permit(:password, :password_confirmation,
+      a = params.require(:user).permit(:password, :password_confirmation,
         :first_name, :last_name, :avatar, :email, :phone, 
-        :gender, :company, :position, :driving_pref, :car, 
-        :radio_stations, :talkativeness, :smoke, :ac)
+        :gender, :company, :position, :driving_pref,
+        :talkativeness, :smoke, :ac, :radio_stations => [])
+      b = params.require(:user).permit(:car => [:make, :model, :year, :colour])
+      return a.merge(b)
     end
 end
