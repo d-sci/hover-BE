@@ -61,7 +61,7 @@ class TripsController < ApplicationController
     end
 
     # Only allow a trusted parameter "white list" through.
-    # NB from array, need syntax as shown below
+    # NB for array, need syntax as shown below
     def trip_params
       params.require(:trip).permit(:waypoints, :to_work, :driver_id, :waytimes => [])
     end
