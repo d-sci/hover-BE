@@ -1,8 +1,9 @@
 class TripSerializer < ActiveModel::Serializer
   attributes :id, :waypoints, :waytimes, :to_work, :driver_id, :order, :confirmed, :base_trips, :users
   
-  def users #this is actually only active_users
-    ActiveModelSerializers::SerializableResource.new(object.active_users, each_serializer: UserSerializer, scope: scope)
+  # May need to change later to include only active (or pending?) users, forget it for now.
+  def users 
+    ActiveModelSerializers::SerializableResource.new(object.users, each_serializer: UserSerializer, scope: scope)
   end
   
   def waytimes
